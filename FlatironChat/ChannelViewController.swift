@@ -28,6 +28,7 @@ class ChannelViewController: UITableViewController {
     
     func getChannels() {
         self.channels.removeAll()
+     
         FIRDatabase.database().reference().child("channels").observe(.childAdded, with: { (snapshot) in
             
             if let channelDict = snapshot.value as? [String: Any] {
@@ -38,8 +39,16 @@ class ChannelViewController: UITableViewController {
                 let participants = participantDict.keys.count
                 
                 let channel = Channel(name: channelName, lastMsg: lastMsg, numberOfParticipants: participants)
+                print(channel)
                 
-                self.channels.append(channel)
+                if self.channels.contains(where: { $0.name == channel.name }) {
+                    
+                } else {
+                    self.channels.append(channel)
+                }
+                
+            
+                
                 self.tableView.reloadData()
             }
             
